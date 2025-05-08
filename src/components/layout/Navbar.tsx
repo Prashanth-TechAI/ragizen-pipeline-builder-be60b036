@@ -1,10 +1,25 @@
 
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
+import { useTheme } from "@/contexts/ThemeContext";
+import { Sun, Moon } from "lucide-react";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const { theme, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
+  const handleSlidesClick = () => {
+    navigate("/slides");
+  };
 
   return (
     <nav className="bg-background border-b border-border">
@@ -18,15 +33,20 @@ export default function Navbar() {
             </div>
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <a href="#" className="px-3 py-2 rounded-md text-sm font-medium text-primary hover:bg-accent hover:text-accent-foreground">
+                <a href="/" className="px-3 py-2 rounded-md text-sm font-medium text-primary hover:bg-accent hover:text-accent-foreground">
                   Home
                 </a>
                 <a href="#" className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                   Docs
                 </a>
-                <a href="#" className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground">
-                  Examples
-                </a>
+                {isAuthenticated && (
+                  <button 
+                    onClick={handleSlidesClick}
+                    className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+                  >
+                    Slides
+                  </button>
+                )}
                 <a href="#" className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground">
                   Pricing
                 </a>
@@ -35,15 +55,40 @@ export default function Navbar() {
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <Button variant="outline" className="mr-2">
-                Log in
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                className="mr-2" 
+                onClick={toggleTheme}
+              >
+                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </Button>
-              <Button>
-                Sign up
-              </Button>
+              
+              {!isAuthenticated ? (
+                <>
+                  <Button variant="outline" className="mr-2" onClick={handleLoginClick}>
+                    Log in
+                  </Button>
+                  <Button>
+                    Sign up
+                  </Button>
+                </>
+              ) : (
+                <Button variant="outline" onClick={handleSlidesClick}>
+                  My Slides
+                </Button>
+              )}
             </div>
           </div>
           <div className="md:hidden flex">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="mr-2" 
+              onClick={toggleTheme}
+            >
+              {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+            </Button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="inline-flex items-center justify-center rounded-md p-2 text-foreground hover:bg-accent hover:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
@@ -65,25 +110,38 @@ export default function Navbar() {
       
       <div className={cn("md:hidden", mobileMenuOpen ? "block" : "hidden")}>
         <div className="space-y-1 px-2 pb-3 pt-2">
-          <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-primary hover:bg-accent hover:text-accent-foreground">
+          <a href="/" className="block px-3 py-2 rounded-md text-base font-medium text-primary hover:bg-accent hover:text-accent-foreground">
             Home
           </a>
           <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground">
             Docs
           </a>
-          <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground">
-            Examples
-          </a>
+          {isAuthenticated && (
+            <button 
+              onClick={handleSlidesClick}
+              className="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground"
+            >
+              Slides
+            </button>
+          )}
           <a href="#" className="block px-3 py-2 rounded-md text-base font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground">
             Pricing
           </a>
           <div className="mt-4 flex flex-col space-y-2 px-3">
-            <Button variant="outline" className="w-full justify-center">
-              Log in
-            </Button>
-            <Button className="w-full justify-center">
-              Sign up
-            </Button>
+            {!isAuthenticated ? (
+              <>
+                <Button variant="outline" className="w-full justify-center" onClick={handleLoginClick}>
+                  Log in
+                </Button>
+                <Button className="w-full justify-center">
+                  Sign up
+                </Button>
+              </>
+            ) : (
+              <Button variant="outline" className="w-full justify-center" onClick={handleSlidesClick}>
+                My Slides
+              </Button>
+            )}
           </div>
         </div>
       </div>

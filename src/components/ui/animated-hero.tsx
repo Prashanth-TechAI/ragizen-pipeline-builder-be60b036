@@ -3,9 +3,14 @@ import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import { MoveRight, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  
   const titles = useMemo(
     () => ["Semantic RAG", "Analytical SQL", "No-Code AI", "Data Pipelines", "Smart Agents"],
     []
@@ -21,6 +26,18 @@ function Hero() {
     }, 2000);
     return () => clearTimeout(timeoutId);
   }, [titleNumber, titles]);
+
+  const handleLoginClick = () => {
+    navigate("/login");
+  };
+
+  const handleSlidesClick = () => {
+    if (isAuthenticated) {
+      navigate("/slides");
+    } else {
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="w-full">
@@ -67,10 +84,14 @@ function Hero() {
             </p>
           </div>
           <div className="flex flex-row gap-3 flex-wrap justify-center">
-            <Button size="lg" className="gap-4" variant="outline">
+            <Button size="lg" className="gap-4" variant="outline" onClick={handleLoginClick}>
               Contact us <PhoneCall className="w-4 h-4" />
             </Button>
-            <Button size="lg" className="gap-4 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
+            <Button 
+              size="lg" 
+              className="gap-4 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+              onClick={handleSlidesClick}
+            >
               Get started <MoveRight className="w-4 h-4" />
             </Button>
           </div>

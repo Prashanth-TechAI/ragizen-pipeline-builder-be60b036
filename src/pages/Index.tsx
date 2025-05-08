@@ -1,19 +1,31 @@
 
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Hero } from "@/components/ui/animated-hero";
 import Features from "@/components/landing/Features";
 import HowItWorks from "@/components/landing/HowItWorks";
-import PipelineBuilder from "@/components/pipeline/PipelineBuilder";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  
+  const handleSlidesClick = () => {
+    if (isAuthenticated) {
+      navigate("/slides");
+    } else {
+      navigate("/login");
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       
       <main className="flex-grow">
-        <section className="bg-gradient-to-b from-white to-gray-50">
+        <section className="bg-gradient-to-b from-background to-muted/30">
           <Hero />
           
           <div className="container mx-auto px-4 pb-16">
@@ -25,8 +37,8 @@ const Index = () => {
                   className="w-full h-full object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end justify-center pb-6">
-                  <Button className="bg-white text-gray-900 hover:bg-gray-100">
-                    Watch Demo
+                  <Button className="bg-white text-gray-900 hover:bg-gray-100" onClick={handleSlidesClick}>
+                    View Slides
                   </Button>
                 </div>
               </div>
@@ -48,8 +60,12 @@ const Index = () => {
               <Button size="lg" variant="outline">
                 View Documentation
               </Button>
-              <Button size="lg" className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
-                Get Started for Free
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+                onClick={handleSlidesClick}
+              >
+                {isAuthenticated ? "View Slides" : "Get Started"}
               </Button>
             </div>
           </div>
