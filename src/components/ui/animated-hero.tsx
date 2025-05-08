@@ -1,18 +1,18 @@
 
 import { useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
-import { MoveRight, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "@/contexts/AuthContext";
+import { MoveRight, PhoneCall } from "lucide-react";
 
 function Hero() {
   const [titleNumber, setTitleNumber] = useState(0);
-  const { isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  
   const titles = useMemo(
-    () => ["Semantic RAG", "Analytical SQL", "No-Code AI", "Data Pipelines", "Smart Agents"],
+    () => [
+      "Semantic RAG",
+      "Analytical SQL",
+      "No-Code AI",
+      "Data Pipelines",
+      "Smart Agents"
+    ],
     []
   );
 
@@ -26,18 +26,6 @@ function Hero() {
     }, 2000);
     return () => clearTimeout(timeoutId);
   }, [titleNumber, titles]);
-
-  const handleLoginClick = () => {
-    navigate("/login");
-  };
-
-  const handleSlidesClick = () => {
-    if (isAuthenticated) {
-      navigate("/slides");
-    } else {
-      navigate("/login");
-    }
-  };
 
   return (
     <div className="w-full">
@@ -54,25 +42,21 @@ function Hero() {
               <span className="relative flex w-full justify-center overflow-hidden text-center md:pb-4 md:pt-1">
                 &nbsp;
                 {titles.map((title, index) => (
-                  <motion.span
+                  <span
                     key={index}
-                    className="absolute font-semibold text-blue-500"
-                    initial={{ opacity: 0, y: "-100" }}
-                    transition={{ type: "spring", stiffness: 50 }}
-                    animate={
-                      titleNumber === index
-                        ? {
-                            y: 0,
-                            opacity: 1,
-                          }
-                        : {
-                            y: titleNumber > index ? -150 : 150,
-                            opacity: 0,
-                          }
-                    }
+                    className={`absolute font-semibold ${
+                      titleNumber === index ? "opacity-100 transform translate-y-0" : 
+                      "opacity-0 transform translate-y-8"
+                    } transition-all duration-300 ease-out ${
+                      index === 0 ? "text-blue-500" :
+                      index === 1 ? "text-purple-500" :
+                      index === 2 ? "text-green-500" :
+                      index === 3 ? "text-amber-500" :
+                      "text-rose-500"
+                    }`}
                   >
                     {title}
-                  </motion.span>
+                  </span>
                 ))}
               </span>
             </h1>
@@ -84,14 +68,10 @@ function Hero() {
             </p>
           </div>
           <div className="flex flex-row gap-3 flex-wrap justify-center">
-            <Button size="lg" className="gap-4" variant="outline" onClick={handleLoginClick}>
+            <Button size="lg" className="gap-4" variant="outline">
               Contact us <PhoneCall className="w-4 h-4" />
             </Button>
-            <Button 
-              size="lg" 
-              className="gap-4 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
-              onClick={handleSlidesClick}
-            >
+            <Button size="lg" className="gap-4 bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
               Get started <MoveRight className="w-4 h-4" />
             </Button>
           </div>
