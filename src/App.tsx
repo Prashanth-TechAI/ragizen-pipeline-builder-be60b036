@@ -10,6 +10,7 @@ import Index from "./pages/Index";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import CreateAgent from "./pages/CreateAgent";
+import Developers from "./pages/Developers";
 import PipelineBuilder from "./components/pipeline/PipelineBuilder";
 import NotFound from "./pages/NotFound";
 
@@ -32,6 +33,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/developers" element={<Developers />} />
         <Route 
           path="/dashboard" 
           element={
