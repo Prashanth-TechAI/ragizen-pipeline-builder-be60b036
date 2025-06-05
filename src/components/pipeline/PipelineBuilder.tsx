@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -126,7 +125,10 @@ const PipelineBuilder = () => {
     setTimeout(() => {
       setIsBuilding(false);
       setBuildComplete(true);
-      toast.success("Agent built successfully!");
+      toast({
+        title: "Success!",
+        description: "Agent built successfully!",
+      });
     }, 3000);
   };
 
