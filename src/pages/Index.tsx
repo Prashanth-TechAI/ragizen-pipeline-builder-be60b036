@@ -8,26 +8,16 @@ import HowItWorks from "@/components/landing/HowItWorks";
 import DemoSection from "@/components/landing/DemoSection";
 import DevelopersSection from "@/components/landing/DevelopersSection";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "@/contexts/AuthContext";
 
 const Index = () => {
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   
   const handleGetStarted = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard");
-    } else {
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   const handleBuildAgent = () => {
-    if (isAuthenticated) {
-      navigate("/dashboard/create-agent");
-    } else {
-      navigate("/login");
-    }
+    navigate("/login");
   };
 
   return (

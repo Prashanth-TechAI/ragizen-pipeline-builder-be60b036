@@ -12,6 +12,7 @@ const BuildAnimation = () => {
   const [progress, setProgress] = useState(0);
   const [currentStep, setCurrentStep] = useState("");
   const [isComplete, setIsComplete] = useState(false);
+  const [showPreview, setShowPreview] = useState(false);
 
   const buildSteps = [
     "Initializing build environment...",
@@ -44,8 +45,7 @@ const BuildAnimation = () => {
   }, []);
 
   const handlePreview = () => {
-    // Open iframe preview in new window or modal
-    window.open(`/preview/${type}/${sessionId}`, '_blank', 'width=1200,height=800');
+    setShowPreview(true);
   };
 
   const handleDownload = () => {
@@ -55,6 +55,51 @@ const BuildAnimation = () => {
     link.download = `${type}-agent-${sessionId}.zip`;
     link.click();
   };
+
+  const handleHome = () => {
+    navigate("/dashboard");
+  };
+
+  if (showPreview) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 p-4">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-6 flex justify-between items-center">
+            <h1 className="text-2xl font-bold text-white">
+              Preview: {type?.toUpperCase()} Agent
+            </h1>
+            <div className="flex gap-4">
+              <Button 
+                onClick={handleDownload}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download Code
+              </Button>
+              <Button 
+                onClick={handleHome}
+                variant="outline" 
+                className="border-gray-600 text-gray-300 hover:bg-gray-800"
+              >
+                <Home className="w-4 h-4 mr-2" />
+                Home
+              </Button>
+            </div>
+          </div>
+          
+          <Card className="bg-black/30 backdrop-blur-lg border-purple-500/30">
+            <CardContent className="p-0">
+              <iframe
+                src={`/api/${type}/preview/${sessionId}`}
+                className="w-full h-[calc(100vh-200px)] rounded-lg"
+                title="Agent Preview"
+              />
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-900 to-blue-900 flex items-center justify-center p-4">

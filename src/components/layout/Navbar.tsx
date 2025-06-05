@@ -17,6 +17,10 @@ export default function Navbar() {
     navigate("/login");
   };
 
+  const handleSignupClick = () => {
+    navigate("/signup");
+  };
+
   const handleDashboardClick = () => {
     navigate("/dashboard");
   };
@@ -90,7 +94,7 @@ export default function Navbar() {
                   </Button>
                   <Button 
                     className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
-                    onClick={() => navigate("/signup")}
+                    onClick={handleSignupClick}
                   >
                     Get Started
                   </Button>
@@ -147,7 +151,10 @@ export default function Navbar() {
                 <Button variant="outline" className="w-full justify-center" onClick={handleLoginClick}>
                   Log in
                 </Button>
-                <Button className="w-full justify-center bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
+                <Button 
+                  className="w-full justify-center bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+                  onClick={handleSignupClick}
+                >
                   Get Started
                 </Button>
               </>

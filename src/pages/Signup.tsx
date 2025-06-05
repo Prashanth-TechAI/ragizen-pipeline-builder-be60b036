@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
+import { toast } from "@/hooks/use-toast";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
@@ -18,7 +19,11 @@ export default function Signup() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Passwords don't match");
+      toast({
+        title: "Error",
+        description: "Passwords don't match",
+        variant: "destructive"
+      });
       return;
     }
     const success = signup(username, email, password);
@@ -39,20 +44,15 @@ export default function Signup() {
           Back to Home
         </Button>
         
-        <Card className="border-2 shadow-xl">
+        <Card className="border-2 shadow-xl bg-white">
           <CardHeader className="text-center">
-            <div className="mb-4">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
-                WEDNES AI
-              </h1>
-            </div>
-            <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-            <CardDescription>Sign up to start building AI agents</CardDescription>
+            <CardTitle className="text-2xl font-bold text-gray-800">Create Account</CardTitle>
+            <CardDescription className="text-gray-600">Sign up to start building AI agents</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="username" className="text-sm font-medium">
+                <label htmlFor="username" className="text-sm font-medium text-gray-700">
                   Username
                 </label>
                 <Input
@@ -62,11 +62,11 @@ export default function Signup() {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   required
-                  className="border-2 focus:border-primary"
+                  className="bg-gray-100 border-0 text-gray-800"
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">
+                <label htmlFor="email" className="text-sm font-medium text-gray-700">
                   Email
                 </label>
                 <Input
@@ -76,11 +76,11 @@ export default function Signup() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="border-2 focus:border-primary"
+                  className="bg-gray-100 border-0 text-gray-800"
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">
+                <label htmlFor="password" className="text-sm font-medium text-gray-700">
                   Password
                 </label>
                 <Input
@@ -90,11 +90,11 @@ export default function Signup() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="border-2 focus:border-primary"
+                  className="bg-gray-100 border-0 text-gray-800"
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="confirmPassword" className="text-sm font-medium">
+                <label htmlFor="confirmPassword" className="text-sm font-medium text-gray-700">
                   Confirm Password
                 </label>
                 <Input
@@ -104,21 +104,21 @@ export default function Signup() {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   required
-                  className="border-2 focus:border-primary"
+                  className="bg-gray-100 border-0 text-gray-800"
                 />
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
               >
                 Create Account
               </Button>
             </form>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-600">
                 Already have an account?{" "}
-                <Link to="/login" className="text-primary hover:underline font-medium">
+                <Link to="/login" className="text-purple-600 hover:underline font-medium">
                   Sign in here
                 </Link>
               </p>

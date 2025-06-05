@@ -33,20 +33,15 @@ export default function Login() {
           Back to Home
         </Button>
         
-        <Card className="border-2 shadow-xl">
+        <Card className="border-2 shadow-xl bg-white">
           <CardHeader className="text-center">
-            <div className="mb-4">
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-blue-500 bg-clip-text text-transparent">
-                WEDNES AI
-              </h1>
-            </div>
-            <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-            <CardDescription>Sign in to your account to continue building AI agents</CardDescription>
+            <CardTitle className="text-2xl font-bold text-gray-800">Log in to WEDNES AI</CardTitle>
+            <CardDescription className="text-gray-600">Enter your credentials to access your agents</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium">
+                <label htmlFor="email" className="text-sm font-medium text-gray-700">
                   Email
                 </label>
                 <Input
@@ -56,21 +51,21 @@ export default function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="border-2 focus:border-primary"
+                  className="bg-gray-100 border-0 text-gray-800"
                 />
               </div>
               <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium">
+                <label htmlFor="password" className="text-sm font-medium text-gray-700">
                   Password
                 </label>
                 <Input
                   id="password"
                   type="password"
-                  placeholder="test123"
+                  placeholder="••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="border-2 focus:border-primary"
+                  className="bg-gray-100 border-0 text-gray-800"
                 />
               </div>
               <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
@@ -80,25 +75,25 @@ export default function Login() {
               </div>
               <Button 
                 type="submit" 
-                className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+                className="w-full bg-purple-600 hover:bg-purple-700 text-white"
               >
-                Sign In
+                Log in
               </Button>
             </form>
             
             <div className="mt-4 text-center">
               <Link 
                 to="/forgot-password" 
-                className="text-sm text-primary hover:underline"
+                className="text-sm text-purple-600 hover:underline"
               >
                 Forgot password?
               </Link>
             </div>
             
             <div className="mt-6 text-center">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-gray-600">
                 Don't have an account?{" "}
-                <Link to="/signup" className="text-primary hover:underline font-medium">
+                <Link to="/signup" className="text-purple-600 hover:underline font-medium">
                   Sign up here
                 </Link>
               </p>
