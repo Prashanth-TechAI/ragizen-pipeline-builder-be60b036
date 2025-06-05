@@ -8,7 +8,9 @@ import { AuthProvider, useAuth } from "./contexts/AuthContext";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
-import Slides from "./pages/Slides";
+import Dashboard from "./pages/Dashboard";
+import CreateAgent from "./pages/CreateAgent";
+import PipelineBuilder from "./components/pipeline/PipelineBuilder";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,10 +33,26 @@ const AppRoutes = () => {
         <Route path="/" element={<Index />} />
         <Route path="/login" element={<Login />} />
         <Route 
-          path="/slides" 
+          path="/dashboard" 
           element={
             <ProtectedRoute>
-              <Slides />
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard/create-agent" 
+          element={
+            <ProtectedRoute>
+              <CreateAgent />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/pipeline/:type" 
+          element={
+            <ProtectedRoute>
+              <PipelineBuilder />
             </ProtectedRoute>
           } 
         />
