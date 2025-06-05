@@ -4,11 +4,14 @@ import { toast } from '@/components/ui/sonner';
 
 interface User {
   email: string;
+  username?: string;
 }
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => boolean;
+  signup: (username: string, email: string, password: string) => boolean;
+  forgotPassword: (email: string) => boolean;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -24,7 +27,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = (email: string, password: string) => {
     // Demo credentials check
     if (email === 'test@gmail.com' && password === 'test123') {
-      const user = { email };
+      const user = { email, username: 'TestUser' };
       setUser(user);
       localStorage.setItem('user', JSON.stringify(user));
       toast.success('Login successful');
@@ -35,6 +38,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const signup = (username: string, email: string, password: string) => {
+    // Demo signup - in real app, this would call API
+    const user = { email, username };
+    setUser(user);
+    localStorage.setItem('user', JSON.stringify(user));
+    toast.success('Account created successfully');
+    return true;
+  };
+
+  const forgotPassword = (email: string) => {
+    // Demo forgot password - in real app, this would call API
+    toast.success('Password reset email sent');
+    return true;
+  };
+
   const logout = () => {
     setUser(null);
     localStorage.removeItem('user');
@@ -42,7 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, isAuthenticated: !!user }}>
+    <AuthContext.Provider value={{ user, login, signup, forgotPassword, logout, isAuthenticated: !!user }}>
       {children}
     </AuthContext.Provider>
   );

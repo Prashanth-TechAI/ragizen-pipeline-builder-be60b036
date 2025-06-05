@@ -8,7 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { ArrowLeft, ArrowRight, HelpCircle, Database, FileText, Brain, Zap, Settings, Eye, Download, Home } from "lucide-react";
+import { ArrowLeft, ArrowRight, HelpCircle, Database, FileText, Brain, Zap, Settings, Eye, Download, Home, File, Table } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/layout/Navbar";
 
@@ -48,33 +48,59 @@ const sqlSteps = [
 ];
 
 const sourceTypes = {
-  rag: ["PDF", "CSV", "Excel", "Postgres", "MySQL", "SQLite", "MongoDB", "TXT"],
+  rag: ["PDF", "CSV", "Excel", "TXT", "Postgres", "MySQL", "SQLite", "MongoDB"],
   sql: ["Postgres", "MySQL", "SQLite", "CSV", "Excel"]
 };
 
 const embeddingModels = [
   "OpenAI Embedding",
   "Sentence Transformers (all-MiniLM-L6)",
-  "HuggingFace Embeddings"
+  "HuggingFace Embeddings",
+  "DeepEval Embedding"
 ];
 
 const vectorStores = ["ChromaDB", "FAISS", "Pinecone", "Qdrant", "Milvus"];
 
 const llmProviders = {
-  "OpenAI": ["gpt-4o", "gpt-4.1", "gpt-4.1-mini"],
-  "Claude": ["claude-4-opus", "claude-4-sonnet", "claude-3.5-haiku"],
-  "Groq": ["llama-3.3-70b-versatile", "llama-3.1-8b-instant"],
-  "DeepSeek": ["deepseek-coder-v2", "deepseek-v2.5-chat", "deepseek-reasoner"],
-  "Gemini": ["gemini-1.5-flash", "gemini-2.0-flash-lite"]
+  "OpenAI": ["gpt-4o", "gpt-4.1", "gpt-4.1-mini", "gpt-4o-mini"],
+  "Claude": ["claude-4-opus", "claude-4-sonnet", "claude-3.7-sonnet", "claude-3.5-haiku"],
+  "Groq": ["llama-3.3-70b-versatile", "llama-3.1-8b-instant", "llama3-70b-8192", "llama3-8b-8192", "deepseek-r1-distill-llama-70b"],
+  "DeepSeek": ["deepseek-v3", "deepseek-r1", "deepseek-coder-v2", "deepseek-v2.5-chat", "deepseek-reasoner"],
+  "Gemini": ["gemini-2.0-flash", "gemini-2.0-flash-lite", "gemini-1.5-flash", "gemini-1.5-flash-8b"]
 };
 
-const frameworks = ["PandasAI", "VannaAI", "REPL", "Langchain SQL"];
+const frameworks = ["PandasAI", "VannaAI Database", "VannaAI File", "SQL Query Database", "SQL Query File"];
 
 const defaultPrompts = [
   "You are a helpful AI assistant that answers questions based on the provided context.",
   "You are an expert data analyst. Help users understand their data through clear explanations.",
   "You are a document expert. Answer questions accurately based on the uploaded documents."
 ];
+
+const getSourceIcon = (source: string) => {
+  const icons: { [key: string]: JSX.Element } = {
+    "PDF": <FileText className="w-6 h-6 text-red-500" />,
+    "CSV": <Table className="w-6 h-6 text-green-500" />,
+    "Excel": <Table className="w-6 h-6 text-emerald-500" />,
+    "TXT": <File className="w-6 h-6 text-blue-500" />,
+    "Postgres": <Database className="w-6 h-6 text-blue-600" />,
+    "MySQL": <Database className="w-6 h-6 text-orange-500" />,
+    "SQLite": <Database className="w-6 h-6 text-gray-600" />,
+    "MongoDB": <Database className="w-6 h-6 text-green-600" />
+  };
+  return icons[source] || <Database className="w-6 h-6 text-gray-500" />;
+};
+
+const getLLMIcon = (provider: string) => {
+  const icons: { [key: string]: JSX.Element } = {
+    "OpenAI": <Zap className="w-6 h-6 text-green-500" />,
+    "Claude": <Brain className="w-6 h-6 text-orange-500" />,
+    "Groq": <Zap className="w-6 h-6 text-blue-500" />,
+    "DeepSeek": <Brain className="w-6 h-6 text-purple-500" />,
+    "Gemini": <Zap className="w-6 h-6 text-red-500" />
+  };
+  return icons[provider] || <Zap className="w-6 h-6 text-gray-500" />;
+};
 
 const PipelineBuilder = () => {
   const { type } = useParams<{ type: string }>();
@@ -121,15 +147,8 @@ const PipelineBuilder = () => {
 
   const handleBuild = async () => {
     setIsBuilding(true);
-    // Simulate build process
-    setTimeout(() => {
-      setIsBuilding(false);
-      setBuildComplete(true);
-      toast({
-        title: "Success!",
-        description: "Agent built successfully!",
-      });
-    }, 3000);
+    // Navigate to build animation page
+    navigate(`/build/${type}/${sessionId}`);
   };
 
   const getStepComponent = () => {
@@ -166,8 +185,8 @@ const PipelineBuilder = () => {
                   onClick={() => updateConfig("sourceType", source)}
                 >
                   <CardContent className="p-4 text-center">
-                    <Database className="w-8 h-8 mx-auto mb-2 text-purple-600" />
-                    <p className="font-medium text-gray-700 dark:text-gray-300">{source}</p>
+                    {getSourceIcon(source)}
+                    <p className="font-medium text-gray-700 dark:text-gray-300 mt-2">{source}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -250,19 +269,27 @@ const PipelineBuilder = () => {
         return (
           <div className="space-y-4">
             <Label className="text-lg font-semibold text-gray-800 dark:text-gray-200">Choose LLM Provider</Label>
-            <Select value={config.llmProvider} onValueChange={(value) => updateConfig("llmProvider", value)}>
-              <SelectTrigger className="border-2 focus:border-purple-500">
-                <SelectValue placeholder="Select LLM provider" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.keys(llmProviders).map((provider) => (
-                  <SelectItem key={provider} value={provider}>{provider}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              {Object.keys(llmProviders).map((provider) => (
+                <Card 
+                  key={provider}
+                  className={`cursor-pointer transition-all hover:shadow-lg border-2 ${
+                    config.llmProvider === provider 
+                      ? 'border-purple-500 bg-purple-50 dark:bg-purple-900/20' 
+                      : 'border-gray-200 hover:border-purple-300'
+                  }`}
+                  onClick={() => updateConfig("llmProvider", provider)}
+                >
+                  <CardContent className="p-4 text-center">
+                    {getLLMIcon(provider)}
+                    <p className="font-medium text-gray-700 dark:text-gray-300 mt-2">{provider}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
             
             {config.llmProvider && (
-              <div className="space-y-4">
+              <div className="space-y-4 mt-6">
                 <Select value={config.llmModel} onValueChange={(value) => updateConfig("llmModel", value)}>
                   <SelectTrigger className="border-2 focus:border-purple-500">
                     <SelectValue placeholder="Select model" />
@@ -382,46 +409,13 @@ const PipelineBuilder = () => {
               </CardContent>
             </Card>
 
-            {!isBuilding && !buildComplete && (
-              <Button 
-                onClick={handleBuild}
-                size="lg"
-                className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white px-8 py-3"
-              >
-                Build Agent
-              </Button>
-            )}
-
-            {isBuilding && (
-              <div className="space-y-4">
-                <div className="animate-spin w-16 h-16 border-4 border-purple-500 border-t-transparent rounded-full mx-auto"></div>
-                <p className="text-lg text-purple-600">Building your agent...</p>
-              </div>
-            )}
-
-            {buildComplete && (
-              <div className="space-y-4">
-                <div className="text-green-600 text-lg font-semibold">✅ Agent Built Successfully!</div>
-                <div className="flex gap-4 justify-center">
-                  <Button variant="outline" className="border-purple-500 text-purple-600">
-                    <Eye className="w-4 h-4 mr-2" />
-                    Preview
-                  </Button>
-                  <Button className="bg-green-600 hover:bg-green-700">
-                    <Download className="w-4 h-4 mr-2" />
-                    Download
-                  </Button>
-                </div>
-                <Button 
-                  variant="outline" 
-                  onClick={() => navigate("/dashboard")}
-                  className="border-gray-300 text-gray-600"
-                >
-                  <Home className="w-4 h-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </div>
-            )}
+            <Button 
+              onClick={handleBuild}
+              size="lg"
+              className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600 text-white px-8 py-3"
+            >
+              Build Agent
+            </Button>
           </div>
         );
 
@@ -507,7 +501,7 @@ const PipelineBuilder = () => {
                   <div className="grid grid-cols-1 gap-2">
                     {sourceTypes[isRAG ? 'rag' : 'sql'].map((source) => (
                       <div key={source} className="flex items-center gap-2 p-2 rounded bg-gray-50 dark:bg-gray-800">
-                        <Database className="w-4 h-4 text-purple-500" />
+                        {getSourceIcon(source)}
                         <span className="text-xs text-gray-600 dark:text-gray-400">{source}</span>
                       </div>
                     ))}
@@ -517,7 +511,7 @@ const PipelineBuilder = () => {
                   <div className="space-y-2">
                     {Object.keys(llmProviders).map((provider) => (
                       <div key={provider} className="flex items-center gap-2 p-2 rounded bg-gray-50 dark:bg-gray-800">
-                        <Zap className="w-4 h-4 text-blue-500" />
+                        {getLLMIcon(provider)}
                         <span className="text-xs text-gray-600 dark:text-gray-400">{provider}</span>
                       </div>
                     ))}

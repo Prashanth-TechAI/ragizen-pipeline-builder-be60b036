@@ -7,15 +7,21 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 
-export default function Login() {
+export default function Signup() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useAuth();
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const { signup } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(email, password);
+    if (password !== confirmPassword) {
+      alert("Passwords don't match");
+      return;
+    }
+    const success = signup(username, email, password);
     if (success) {
       navigate("/dashboard");
     }
@@ -40,11 +46,25 @@ export default function Login() {
                 WEDNES AI
               </h1>
             </div>
-            <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-            <CardDescription>Sign in to your account to continue building AI agents</CardDescription>
+            <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
+            <CardDescription>Sign up to start building AI agents</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="space-y-2">
+                <label htmlFor="username" className="text-sm font-medium">
+                  Username
+                </label>
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  className="border-2 focus:border-primary"
+                />
+              </div>
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium">
                   Email
@@ -52,7 +72,7 @@ export default function Login() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="test@gmail.com"
+                  placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -66,40 +86,40 @@ export default function Login() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="test123"
+                  placeholder="Create a password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="border-2 focus:border-primary"
                 />
               </div>
-              <div className="text-sm text-muted-foreground bg-muted/50 p-3 rounded-lg">
-                <strong>Demo Credentials:</strong><br />
-                Email: test@gmail.com<br />
-                Password: test123
+              <div className="space-y-2">
+                <label htmlFor="confirmPassword" className="text-sm font-medium">
+                  Confirm Password
+                </label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  className="border-2 focus:border-primary"
+                />
               </div>
               <Button 
                 type="submit" 
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
               >
-                Sign In
+                Create Account
               </Button>
             </form>
             
-            <div className="mt-4 text-center">
-              <Link 
-                to="/forgot-password" 
-                className="text-sm text-primary hover:underline"
-              >
-                Forgot password?
-              </Link>
-            </div>
-            
             <div className="mt-6 text-center">
               <p className="text-sm text-muted-foreground">
-                Don't have an account?{" "}
-                <Link to="/signup" className="text-primary hover:underline font-medium">
-                  Sign up here
+                Already have an account?{" "}
+                <Link to="/login" className="text-primary hover:underline font-medium">
+                  Sign in here
                 </Link>
               </p>
             </div>

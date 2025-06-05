@@ -1,6 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Github, Linkedin, Twitter, Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -33,30 +34,30 @@ export default function Footer() {
           <div className="col-span-1">
             <h3 className="text-lg font-medium mb-4">Product</h3>
             <ul className="space-y-2">
-              <li><a href="/features" className="text-muted-foreground hover:text-foreground transition-colors">Features</a></li>
-              <li><a href="/pipeline-builder" className="text-muted-foreground hover:text-foreground transition-colors">Pipeline Builder</a></li>
-              <li><a href="/agents" className="text-muted-foreground hover:text-foreground transition-colors">Agent Gallery</a></li>
-              <li><a href="/templates" className="text-muted-foreground hover:text-foreground transition-colors">Templates</a></li>
+              <li><Link to="/features" className="text-muted-foreground hover:text-foreground transition-colors">Features</Link></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Pipeline Builder</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Agent Gallery</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Templates</a></li>
             </ul>
           </div>
           
           <div className="col-span-1">
             <h3 className="text-lg font-medium mb-4">Resources</h3>
             <ul className="space-y-2">
-              <li><a href="/docs" className="text-muted-foreground hover:text-foreground transition-colors">Documentation</a></li>
-              <li><a href="/tutorials" className="text-muted-foreground hover:text-foreground transition-colors">Tutorials</a></li>
-              <li><a href="/api" className="text-muted-foreground hover:text-foreground transition-colors">API Reference</a></li>
-              <li><a href="/community" className="text-muted-foreground hover:text-foreground transition-colors">Community</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Documentation</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Tutorials</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">API Reference</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Community</a></li>
             </ul>
           </div>
           
           <div className="col-span-1">
             <h3 className="text-lg font-medium mb-4">Company</h3>
             <ul className="space-y-2">
-              <li><a href="/about" className="text-muted-foreground hover:text-foreground transition-colors">About</a></li>
-              <li><a href="/blog" className="text-muted-foreground hover:text-foreground transition-colors">Blog</a></li>
-              <li><a href="/careers" className="text-muted-foreground hover:text-foreground transition-colors">Careers</a></li>
-              <li><a href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">Contact</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">About</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Blog</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Careers</a></li>
+              <li><a href="#" className="text-muted-foreground hover:text-foreground transition-colors">Contact</a></li>
             </ul>
           </div>
         </div>
@@ -66,13 +67,13 @@ export default function Footer() {
             &copy; {new Date().getFullYear()} WEDNES AI. All rights reserved.
           </div>
           <div className="flex space-x-6 mt-4 md:mt-0">
-            <a href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
+            <Link to="/privacy-policy" className="text-muted-foreground hover:text-foreground transition-colors">
               Privacy Policy
-            </a>
-            <a href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
+            </Link>
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
               Terms of Service
             </a>
-            <a href="/cookies" className="text-muted-foreground hover:text-foreground transition-colors">
+            <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
               Cookie Policy
             </a>
           </div>

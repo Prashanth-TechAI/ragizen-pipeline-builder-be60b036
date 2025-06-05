@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
@@ -24,10 +24,10 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/features", label: "Features" },
-    { href: "/about", label: "About" },
-    { href: "/how-it-works", label: "How it Works" },
     { href: "/developers", label: "Developers" },
-    { href: "/pricing", label: "Pricing" }
+    { href: "#", label: "How it Works" },
+    { href: "#", label: "Docs" },
+    { href: "#", label: "GitHub" }
   ];
 
   return (
@@ -43,13 +43,23 @@ export default function Navbar() {
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
                 {navLinks.map((link) => (
-                  <a 
-                    key={link.href}
-                    href={link.href} 
-                    className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
-                  >
-                    {link.label}
-                  </a>
+                  link.href.startsWith('/') ? (
+                    <Link 
+                      key={link.href}
+                      to={link.href} 
+                      className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <a 
+                      key={link.href}
+                      href={link.href} 
+                      className="px-3 py-2 rounded-md text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      {link.label}
+                    </a>
+                  )
                 ))}
                 {isAuthenticated && (
                   <button 
@@ -78,7 +88,10 @@ export default function Navbar() {
                   <Button variant="outline" className="mr-2" onClick={handleLoginClick}>
                     Log in
                   </Button>
-                  <Button className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600">
+                  <Button 
+                    className="bg-gradient-to-r from-purple-600 to-blue-500 hover:from-purple-700 hover:to-blue-600"
+                    onClick={() => navigate("/signup")}
+                  >
                     Get Started
                   </Button>
                 </>
